@@ -1,0 +1,8 @@
+.appSideBar{
+    background-color: white;
+    width: 240px;
+    height: calc(100vh - 105px);
+    margin: 5px 5px 10px 10px;
+    box-sizing: border-box;
+    display: inline-block;
+}

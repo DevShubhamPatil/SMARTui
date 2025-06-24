@@ -1,0 +1,25 @@
+.appHeader{
+    background-color: white;
+    width: 100vw;
+    height: 75px;
+    margin: 10px 0px 5px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+.appName{
+    color: #E60000;
+    font-size: 48px;
+    font-size: 50px;
+    line-height: 50px;
+    letter-spacing: 5px;
+    font-weight: 700 ;
+    margin-top: -8px;
+}
+.appFullName{
+    font-size: 11px;
+    font-weight: 500;
+    margin-left: -4px;
+}
