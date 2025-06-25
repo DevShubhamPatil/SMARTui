@@ -9,14 +9,14 @@ function App() {
     <div >
       <Header />
       <div className="appBody">
-        <Sidebar />
-        <div className='mainArea'>
-          <BrowserRouter>
+        <BrowserRouter>
+          <Sidebar />
+          <div className='mainArea'>
             <Routes>
-              <Route path='/' element={<Utility />} />
+              <Route path='/swift' element={<Utility />} />
             </Routes>
-          </BrowserRouter>
-        </div>
+          </div>
+        </BrowserRouter>
       </div>
     </div>
   );
