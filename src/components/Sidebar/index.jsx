@@ -7,7 +7,7 @@ const Sidebar = () =>{
     return(
         <div className="appSideBar">
             <div className="menu">
-                <button className="menuItem" onClick={()=>navigate('/swift')}>SWIFT Compliance</button>
+                <button className="menuItem" onClick={()=>navigate('/swift')}>SWIFT Compliance {'>'}</button>
             </div>
         </div>
     )
