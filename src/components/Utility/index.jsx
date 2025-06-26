@@ -1,86 +1,145 @@
-import { useState } from 'react';
+import { VALID_MT_TYPES } from '../config/MTType';
+import { Response1 } from '../config/Response1';
 import './index.css'
+import { useState, useRef, useEffect } from "react";
 
 const Utility = () => {
-    const [msgType, setMsgType] = useState('');
-    const [crYears, setcrYears] = useState([]);
-    const upArrowSVG = <svg fill="#000000"  viewBox="0 0 330 330"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="XMLID_93_" d="M325.606,229.393l-150.004-150C172.79,76.58,168.974,75,164.996,75c-3.979,0-7.794,1.581-10.607,4.394 l-149.996,150c-5.858,5.858-5.858,15.355,0,21.213c5.857,5.857,15.355,5.858,21.213,0l139.39-139.393l139.397,139.393 C307.322,253.536,311.161,255,315,255c3.839,0,7.678-1.464,10.607-4.394C331.464,244.748,331.464,235.251,325.606,229.393z"></path> </g></svg>
+
+    const [crYear, setcrYear] = useState('');
+    const [tags, setTags] = useState([]);
+    const [inputValue, setInputValue] = useState("");
+    const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [response, setResponse] = useState([]);
+    const containerRef = useRef(null);
+    const curyear = new Date().getFullYear();
+    const options = [curyear, curyear - 1, curyear - 2]
+
     const showOptions = () => {
         const selectbox = document.getElementById("selectionBox");
-        const closeOptions = document.getElementById("closeOptions");
         selectbox.style.visibility = 'visible'
-        closeOptions.style.visibility = 'visible'
-
     }
     const hideOptions = () => {
         const selectbox = document.getElementById("selectionBox");
-        const closeOptions = document.getElementById("closeOptions");
-        closeOptions.style.visibility = 'hidden'
         selectbox.style.visibility = 'hidden'
 
     }
-    const checkBoxToggle = (e) => {
-        if (e.target.checked) {
-            setcrYears(prev => [...prev, e.target.value]);
-        } else {
-            setcrYears(prev => prev.filter(year => year !== e.target.value));
-        }
-    }
-    const handleMsgTypeChange = (e) => {
-        setMsgType(e.target.value);
-        const msgTypeInput = document.querySelector('.msgTypeInput');
-        if (e.target.value.trim() === '') {
-            msgTypeInput.style.border = '1px solid red';
-        } else {
-            msgTypeInput.style.border = '2px solid #aaaaaa';
-        }
-    }
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission logic here
-        console.log("Message Type:", msgType);
-        console.log("CR Years:", crYears);
+        if (crYear === '' || tags.length === 0) {
+            alert("Please select CR Year and at least one Msg Type");
+            return;
+        }
+        setResponse(Response1.data)
     }
+
     const handleReset = () => {
-        setMsgType('');
-        setcrYears([]);
-        const msgTypeInput = document.querySelector('.msgTypeInput');
-        msgTypeInput.style.border = '2px solid #aaaaaa';
+        setcrYear('');
+        setTags([]);
+        setInputValue('');
+        setFilteredSuggestions([]);
+        setShowDropdown(false);
+        setResponse([])
+        setResponse([])
         const checkboxes = document.querySelectorAll('.checkbox');
         checkboxes.forEach(checkbox => checkbox.checked = false);
     }
+
+    const handleOptionClick = (e) => {
+        const selectedValue = e.target.getAttribute('value');
+        setcrYear(selectedValue);
+        hideOptions();
+    }
+
+    {/* ------------------------------------------------------------------------------------------------------------------------------------ */ }
+
+
+    const handleInputChange = (e) => {
+        const value = e.target.value.trim();
+        setInputValue(value);
+        if (value) {
+            const filtered = VALID_MT_TYPES.filter((s) =>
+                s.toLowerCase().includes(value.toLowerCase())
+            ).filter(s => !tags.includes(s)); // Exclude already selected tags
+            if (filtered.length === 0) {
+                filtered.push("No Match found");
+            }
+            setFilteredSuggestions(filtered);
+            setShowDropdown(true);
+        } else {
+            setShowDropdown(false);
+        }
+    };
+
+    const handleSuggestionClick = (item) => {
+        setTags([...tags, item]);
+        setInputValue("");
+        setShowDropdown(false);
+        document.getElementById("msgTypeSearch").focus();
+    };
+
+    const handleClickOutside = (e) => {
+        if (containerRef.current && !containerRef.current.contains(e.target)) {
+            setShowDropdown(false);
+        }
+    };
+    const handleSpecialKeys = (e) => {
+        if (e.key === "Backspace" && inputValue === "") {
+            setTags(tags.slice(0, -1)); // Remove the last tag when Backspace is pressed
+        }
+    }
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    {/* ------------------------------------------------------------------------------------------------------------------------------------ */ }
+
     return (
         <div className="utilityPage">
             <div className="formContainer">
                 <form onSubmit={(e) => e.preventDefault()}>
                     <div className="feilds">
-                        <div className="feild">
-                            <div className="label"><label htmlFor="msgtype">Msg Type :</label></div>
-                            <div><textarea onChange={e=>handleMsgTypeChange(e)} className='msgTypeInput' name="msgtypes" id="msgtype" value={msgType}></textarea></div>
+                        <div className="feild msgTypefeild">
+                            <div className="label">
+                                <label htmlFor="msgtype">Msg Type :</label>
+                            </div>
+                            <div className='msgTypeInputContainerWrapper'>
+                                <div className='msgTypeInputContainer' ref={containerRef}>
+                                    <div className='tagsContainer'>
+                                        {tags.map((tag, index) => (
+                                            <span className='tag' key={index}>
+                                                {tag}
+                                                <span className='removeTag' onClick={() => setTags(tags.filter((_, i) => i !== index))}>X</span>
+                                            </span>
+                                        ))}
+                                        <input id='msgTypeSearch' className='msgTypeInput' type="text" value={inputValue} onChange={handleInputChange} onKeyDown={e => handleSpecialKeys(e)} placeholder="Type to search..." />
+                                    </div>
+                                    <div className='tagSearchInputContainer'>
+                                        {showDropdown && filteredSuggestions.length > 0 && (
+                                            <div className="dropdown">
+                                                {filteredSuggestions.map((item, index) => (
+                                                    <div key={index} onClick={() => handleSuggestionClick(item)} className="dropdown_item">
+                                                        {item}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                         <div className="feild">
                             <div className="label"><label htmlFor="msgtype">CR Year :</label></div>
-                            <div><input onFocus={(e) => showOptions(e)} className='CRInput' name="msgtypes" id="msgtype" readOnly placeholder='--Select--' value={crYears}></input><button className='closeOptions' id='closeOptions' onClick={(e) => { hideOptions(e) }}>{upArrowSVG}</button></div>
-                            <div className="selectionBox" id='selectionBox' >
-                                <div className="option">
-                                    <input className='checkbox' onChange={e=>checkBoxToggle(e)} type="checkbox" name="CRYear" id="2021" value="2021" />
-                                    <label htmlFor="2021">2021</label>
-                                </div>
-                                <div className="option">
-                                    <input className='checkbox' onChange={e=>checkBoxToggle(e)} type="checkbox" name="CRYear" id="2022" value="2022" />
-                                    <label htmlFor="2022">2022</label>
-                                </div>
-                                <div className="option">
-                                    <input className='checkbox' onChange={e=>checkBoxToggle(e)} type="checkbox" name="CRYear" id="2023" value="2023" />
-                                    <label htmlFor="2023">2023</label>
-                                </div>
-                                <div className="option">
-                                    <input className='checkbox' onChange={e=>checkBoxToggle(e)} type="checkbox" name="CRYear" id="2024" value="2024" />
-                                    <label htmlFor="2024">2024</label>
-                                </div>
-                                <div className="option">
-                                    <input className='checkbox' onChange={e=>checkBoxToggle(e)} type="checkbox" name="CRYear" id="2025" value="2025" />
-                                    <label htmlFor="2025">2025</label>
+                            <div className='CRinputContainer' >
+                                <input onFocus={(e) => showOptions(e)} onBlur={e => { hideOptions() }} className='CRInput' name="msgtypes" id="msgtype" readOnly placeholder='--Select--' value={crYear}></input>
+                                <div className="selectionBox" id='selectionBox' >
+                                    {options.map((year) => (
+                                        <div className="options" key={year} value={year} onMouseDown={(e) => handleOptionClick(e)}>{year}</div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -88,10 +147,53 @@ const Utility = () => {
                             <button className="formBtn" onClick={handleSubmit}>Submit</button>
                             <button className="formBtn" onClick={handleReset}>Reset</button>
                         </div>
-
-
                     </div>
                 </form>
+            </div>
+            <div className="responseContainer">
+
+                <table>
+                    {response.map((item, index) => (
+                    <>
+                    <thead>
+                        <tr>
+                            <th style={{backgroundColor:`${item.hasChanges ? '#ffd8d8':'#ddffd8'}`,}} colSpan={5}>
+                                <div className="headerContainer">
+                                    <div className="MTName">- {item.messageType} -</div>
+                                    <div className="respOpt">
+                                        <div className='indicator'> {item.hasChanges ? "Non-Compliant" : "Compliant"}</div>
+                                        <div className='tblbtnContainer'><button className='tblBtn'>Detailed Msg<span className='arrowbtn'>{'>'}</span></button></div>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                        {item.hasChanges&&(
+                        <tr>
+                            <th>Field</th>
+                            <th>Current Value</th>
+                            <th>Requirement Type</th>
+                            <th>Requirement</th>
+                            <th>suggestion</th>
+                        </tr>
+                        )}
+                    </thead>
+                        {item.hasChanges&&(
+                    <tbody>
+                        {item.changes.map((change, fieldIndex) => (
+                            <tr key={fieldIndex}>
+                                <td>{change.field}</td>
+                                <td>{change.current_value}</td>
+                                <td>{change.requirementType}</td>
+                                <td>{change.requirement}</td>
+                                <td>{change.suggestion}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                        )}
+
+                    </>))}
+                </table>
+
             </div>
         </div>
     )

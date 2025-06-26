@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Sidebar = () =>{
     const navigate = useNavigate();
+
     return(
         <div className="appSideBar">
             <div className="menu">
