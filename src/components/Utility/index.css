@@ -3,7 +3,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    overflow: scroll;
+
 }
 
 .formContainer {
@@ -215,34 +215,69 @@
 /* ---------------------------------------------------------------------------------------------------------------------------------------- */
 .responseContainer {
     padding: 50px;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.DRBtnContainer{
+    min-width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-table {
+
+.DRBtn{
+    all: unset;
+    width : 200px;
+    height: 40px;
+    margin: 5px;
+    background-color: #E60000;
+    font-size: 18px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.DRBtn:hover{
+    background-color: #cc0000;
+}
+.DRBtn:active{
+    background-color: #a80000;
+}
+
+.responseTable {
     min-width: 50%;
     border-collapse: collapse;
     font-family: sans-serif;
 }
 
-th, td {
+.responseTable th, .responseTable td {
     border: 1px solid #8b8b8b;
     padding: 10px 20px 10px 10px;
     text-align: left;
-    max-width: 400px;
+    max-width: 500px;
 }
 
 .wht {
     background-color: #ddffd8;
 }
 
-th {
+.responseTable th {
     font-size: 20px;
     background-color: #e3e3e3;
 }
 
-td {
+.responseTable td {
     font-size: 16px;
 }
-.headerContainer{
+
+.headerContainer {
     width: 100%;
     height: 30px;
     display: flex;
@@ -250,17 +285,20 @@ td {
     justify-content: space-between;
 
 }
-.MTName{
+
+.MTName {
     padding-left: 10px;
     font-size: 21px;
 }
-.respOpt{
+
+.respOpt {
     display: flex;
     gap: 20px;
     align-items: center;
     justify-content: space-between;
 }
-.tblBtn{
+
+.tblBtn {
     all: unset;
     width: 130px;
     padding: 7px 5px;
@@ -271,22 +309,25 @@ td {
     justify-content: space-evenly;
     border: 2px solid #a9a9a9;
     box-sizing: border-box;
-    
+    background-color: #8b8b8b5a;
+
 }
-.tblBtn:hover{
+
+.tblBtn:hover {
     color: white;
     background-color: #cc0000;
     cursor: pointer;
     border: none;
 }
-.tblBtn:active{
+
+.tblBtn:active {
     color: white;
     background-color: #a80000;
     border: none;
 }
-.arrowbtn{
-font-size: 20px;
-line-height: 10px;
-margin: 1px 0 0 3px;
 
+.arrowbtn {
+    font-size: 20px;
+    line-height: 10px;
+    margin: 1px 0 0 3px;
 }

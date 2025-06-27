@@ -1,7 +1,7 @@
 export const Response1 = {
   "data": [
     {
-      "messageType": "MT300",
+      "messageType": "MT103",
       "hasChanges": true,
       "changes": [
         {

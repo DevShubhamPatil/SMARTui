@@ -92,7 +92,7 @@ const Utility = () => {
     const handleSpecialKeys = (e) => {
         if (e.key === "Backspace" && inputValue === "") {
             setTags(tags.slice(0, -1)); // Remove the last tag when Backspace is pressed
-        }else if (e.key === "Enter" && inputValue.trim() !== "") {
+        } else if (e.key === "Enter" && inputValue.trim() !== "") {
             console.log("Enter key pressed with input:", inputValue);
             const trimmedInput = inputValue.trim();
             const MTInputArr = trimmedInput.split(',').map(item => item.trim().toUpperCase()).filter(item => VALID_MT_TYPES.includes(item)).filter(item => !tags.includes(item));
@@ -123,9 +123,9 @@ const Utility = () => {
     return (
         <div className="utilityPage">
             <div className="formContainer">
-                <form onSubmit={(e) => e.preventDefault()} onKeyDown={(e) =>{ if (e.key === "Enter") e.preventDefault(); }}>
+                <form onSubmit={(e) => e.preventDefault()} onKeyDown={(e) => { if (e.key === "Enter") e.preventDefault(); }}>
                     <div className="feilds">
-                        
+
                         <div className="feild msgTypefeild">
                             <div className="label">
                                 <label htmlFor="msgtype">Msg Type :</label>
@@ -140,7 +140,7 @@ const Utility = () => {
                                             </span>
                                         ))}
                                         <input id='msgTypeSearch' className='msgTypeInput' type="text" value={inputValue} onChange={handleInputChange} onKeyDown={e => handleSpecialKeys(e)} placeholder="Type to search..." />
-                                        
+
                                     </div>
                                     <div></div>
                                     <div className='tagSearchInputContainer'>
@@ -177,51 +177,51 @@ const Utility = () => {
                 </form>
             </div>
             <div className="responseContainer">
+                {response.length>0 && <div className='DRBtnContainer'><button className='DRBtn'>Download Report</button></div>}
+                <table className='responseTable'>
+                    {response.map((item) => (
+                        <>
+                            <thead>
+                                <tr>
+                                    <th style={{ backgroundColor: `${item.hasChanges ? '#ffd8d8' : '#ddffd8'}`, }} colSpan={5}>
+                                        <div className="headerContainer">
+                                            <div className="MTName">- {item.messageType} -</div>
+                                            <div className="respOpt">
+                                                <div className='indicator'> {item.hasChanges ? "Non-Compliant" : "Compliant"}</div>
+                                                <div className='tblbtnContainer'><button value={item.messageType} onClick={e => handleCompareMsgClick(e.target.value)} className='tblBtn'>Compare Msg<span className='arrowbtn'>{'>'}</span></button></div>
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
+                                {item.hasChanges && (
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Current Value</th>
+                                        <th>Requirement Type</th>
+                                        <th>Requirement</th>
+                                        <th>suggestion</th>
+                                    </tr>
+                                )}
+                            </thead>
+                            {item.hasChanges && (
+                                <tbody>
+                                    {item.changes.map((change, fieldIndex) => (
+                                        <tr key={fieldIndex}>
+                                            <td>{change.field}</td>
+                                            <td>{change.current_value}</td>
+                                            <td>{change.requirementType}</td>
+                                            <td>{change.requirement}</td>
+                                            <td>{change.suggestion}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            )}
 
-                <table>
-                    {response.map((item, index) => (
-                    <>
-                    <thead>
-                        <tr>
-                            <th style={{backgroundColor:`${item.hasChanges ? '#ffd8d8':'#ddffd8'}`,}} colSpan={5}>
-                                <div className="headerContainer">
-                                    <div className="MTName">- {item.messageType} -</div>
-                                    <div className="respOpt">
-                                        <div className='indicator'> {item.hasChanges ? "Non-Compliant" : "Compliant"}</div>
-                                        <div className='tblbtnContainer'><button value={item.messageType} onClick={e => handleCompareMsgClick(e.target.value)} className='tblBtn'>Compare Msg<span className='arrowbtn'>{'>'}</span></button></div>
-                                    </div>
-                                </div>
-                            </th>
-                        </tr>
-                        {item.hasChanges&&(
-                        <tr>
-                            <th>Field</th>
-                            <th>Current Value</th>
-                            <th>Requirement Type</th>
-                            <th>Requirement</th>
-                            <th>suggestion</th>
-                        </tr>
-                        )}
-                    </thead>
-                        {item.hasChanges&&(
-                    <tbody>
-                        {item.changes.map((change, fieldIndex) => (
-                            <tr key={fieldIndex}>
-                                <td>{change.field}</td>
-                                <td>{change.current_value}</td>
-                                <td>{change.requirementType}</td>
-                                <td>{change.requirement}</td>
-                                <td>{change.suggestion}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                        )}
-
-                    </>))}
+                        </>))}
                 </table>
 
             </div>
-           {showCompareScreen && <ValidateAMsg msgTyp={comparemsgType} CRYear={crYear} onClose={() => setShowCompareScreen(false)} />}
+            {showCompareScreen && <ValidateAMsg msgTyp={comparemsgType} CRYear={crYear} onClose={() => setShowCompareScreen(false)} />}
         </div>
     )
 }
