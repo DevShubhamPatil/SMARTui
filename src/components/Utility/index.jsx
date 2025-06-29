@@ -7,6 +7,7 @@ import { useState, useRef, useEffect } from "react";
 const Utility = () => {
 
     const [crYear, setcrYear] = useState('');
+    const [submittedSRYear, setSubmittedSRYear ] = useState('');
     const [tags, setTags] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [filteredSuggestions, setFilteredSuggestions] = useState([]);
@@ -36,11 +37,13 @@ const Utility = () => {
             return;
         }
         document.title = 'Report_SR'+crYear;
+        setSubmittedSRYear(crYear)
         setResponse(Response1.data)
     }
 
     const handleReset = () => {
         setcrYear('');
+        setSubmittedSRYear('')
         setTags([]);
         setInputValue('');
         setFilteredSuggestions([]);
@@ -236,7 +239,7 @@ const Utility = () => {
                 </table>
 
             </div>
-            {showCompareScreen && <ValidateAMsg msgTyp={comparemsgType} CRYear={crYear} onClose={() => {setShowCompareScreen(false); document.title = 'Report_SR'+crYear;}} />}
+            {showCompareScreen && <ValidateAMsg msgTyp={comparemsgType} CRYear={submittedSRYear} onClose={() => {setShowCompareScreen(false); document.title = 'Report_SR'+submittedSRYear;}} />}
         </div>
     )
 }
