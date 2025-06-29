@@ -214,24 +214,28 @@
 /* ---------------------------------------------------------------------------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------------------------------------------------------------------------- */
 .responseContainer {
-    padding: 50px;
-    overflow: scroll;
+    padding: 0px 50px;
+    width: calc(100% - 100px);
+    height: calc(100% - 120px);
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 }
-.DRBtnContainer{
+
+.DRBtnContainer {
     min-width: 50%;
+    margin-top: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 
-.DRBtn{
+.DRBtn {
     all: unset;
-    width : 200px;
+    width: 200px;
     height: 40px;
     margin: 5px;
     background-color: #E60000;
@@ -244,10 +248,12 @@
     text-align: center;
     margin-bottom: 20px;
 }
-.DRBtn:hover{
+
+.DRBtn:hover {
     background-color: #cc0000;
 }
-.DRBtn:active{
+
+.DRBtn:active {
     background-color: #a80000;
 }
 
@@ -255,6 +261,7 @@
     min-width: 50%;
     border-collapse: collapse;
     font-family: sans-serif;
+    margin-bottom: 100px;
 }
 
 .responseTable th, .responseTable td {
@@ -330,4 +337,52 @@
     font-size: 20px;
     line-height: 10px;
     margin: 1px 0 0 3px;
+}
+
+
+@media print {
+    @page {
+        size: A3;
+    }
+
+    body *, .tblbtnContainer {
+        visibility: hidden;
+    }
+
+    .print_mode, .print_mode * {
+        visibility: visible;
+    }
+
+    .tblbtnContainer * {
+        visibility: hidden;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .responseContainer,
+    .MsgOutput,
+    .gotResult,
+    .ValiudateMsgPopupContainer,
+    .ValiudateMsgPopup {
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+.ValiudateMsgPopupContainer{
+    position: static;
+}
+    .resultTable tr{
+        page-break-inside: avoid;
+    }
+
+    .print_mode {
+        position: absolute;
+        left: 0;
+        top: 30px;
+        width: 100%;
+
+    }
 }

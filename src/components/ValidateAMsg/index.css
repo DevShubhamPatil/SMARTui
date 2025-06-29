@@ -185,7 +185,7 @@
     padding: 20px 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     font-size: 3em;
     font-weight: bold;
@@ -229,6 +229,7 @@
     border-collapse: collapse;
     border: 2px solid #E60000;
     box-sizing: border-box;
+    margin-bottom: 100px;
 }
 
 .resultTable th{
@@ -252,4 +253,13 @@ border: none;
 
 .resultTable td {
     font-size: 16px;
+}
+
+
+
+@media print {
+    .resultTable tr{
+        page-break-inside: avoid;
+    }
+
 }

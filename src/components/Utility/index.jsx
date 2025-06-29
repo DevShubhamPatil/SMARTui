@@ -35,6 +35,7 @@ const Utility = () => {
             alert("Please select CR Year and at least one Msg Type");
             return;
         }
+        document.title = 'Report_SR'+crYear;
         setResponse(Response1.data)
     }
 
@@ -46,6 +47,7 @@ const Utility = () => {
         setShowDropdown(false);
         setResponse([])
         setResponse([])
+        document.title = 'SMART';
         const checkboxes = document.querySelectorAll('.checkbox');
         checkboxes.forEach(checkbox => checkbox.checked = false);
     }
@@ -78,6 +80,9 @@ const Utility = () => {
     };
 
     const handleSuggestionClick = (item) => {
+        if (item === "No Match found") {
+            return;
+        }
         setTags([...tags, item]);
         setInputValue("");
         setShowDropdown(false);
@@ -112,6 +117,14 @@ const Utility = () => {
         setShowCompareScreen(true);
     }
 
+
+    const handlePrint = () => {
+        document.getElementById('responseTable').classList.add('print_mode');
+        window.print();
+        setTimeout(() => {
+            document.getElementById('responseTable').classList.remove('print_mode');
+        }, 1000);
+    }
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -159,7 +172,7 @@ const Utility = () => {
                             </div>
                         </div>
                         <div className="feild">
-                            <div className="label"><label htmlFor="msgtype">CR Year :</label></div>
+                            <div className="label"><label htmlFor="msgtype">SR Year :</label></div>
                             <div className='CRinputContainer' >
                                 <input onFocus={(e) => showOptions(e)} onBlur={e => { hideOptions() }} className='CRInput' name="msgtypes" id="msgtype" readOnly placeholder='--Select--' value={crYear}></input>
                                 <div className="selectionBox" id='selectionBox' >
@@ -177,11 +190,12 @@ const Utility = () => {
                 </form>
             </div>
             <div className="responseContainer">
-                {response.length>0 && <div className='DRBtnContainer'><button className='DRBtn'>Download Report</button></div>}
-                <table className='responseTable'>
+                {response.length>0 && <div className='DRBtnContainer'><button className='DRBtn' onClick={()=>handlePrint()}>Download Report</button></div>}
+                <table className='responseTable' id='responseTable'>
+                    <tbody>
                     {response.map((item) => (
                         <>
-                            <thead>
+                            
                                 <tr>
                                     <th style={{ backgroundColor: `${item.hasChanges ? '#ffd8d8' : '#ddffd8'}`, }} colSpan={5}>
                                         <div className="headerContainer">
@@ -202,9 +216,9 @@ const Utility = () => {
                                         <th>suggestion</th>
                                     </tr>
                                 )}
-                            </thead>
+                            
                             {item.hasChanges && (
-                                <tbody>
+                             <>
                                     {item.changes.map((change, fieldIndex) => (
                                         <tr key={fieldIndex}>
                                             <td>{change.field}</td>
@@ -214,14 +228,15 @@ const Utility = () => {
                                             <td>{change.suggestion}</td>
                                         </tr>
                                     ))}
-                                </tbody>
+                            </>
                             )}
 
                         </>))}
+                        </tbody>
                 </table>
 
             </div>
-            {showCompareScreen && <ValidateAMsg msgTyp={comparemsgType} CRYear={crYear} onClose={() => setShowCompareScreen(false)} />}
+            {showCompareScreen && <ValidateAMsg msgTyp={comparemsgType} CRYear={crYear} onClose={() => {setShowCompareScreen(false); document.title = 'Report_SR'+crYear;}} />}
         </div>
     )
 }
