@@ -7,7 +7,7 @@ import { useState, useRef, useEffect } from "react";
 const Utility = () => {
 
     const [crYear, setcrYear] = useState('');
-    const [submittedSRYear, setSubmittedSRYear ] = useState('');
+    const [submittedSRYear, setSubmittedSRYear] = useState('');
     const [tags, setTags] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [filteredSuggestions, setFilteredSuggestions] = useState([]);
@@ -36,9 +36,20 @@ const Utility = () => {
             alert("Please select CR Year and at least one Msg Type");
             return;
         }
-        document.title = 'Report_SR'+crYear;
+        const URL = `http://localhost:8000/parse-rules-from-year?year=${crYear}&mt_list=${tags.join('&mt_list=')}`
+        console.log(URL)
         setSubmittedSRYear(crYear)
+        fetch(URL)
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(e=>{console.log(e)
+        document.title = 'Report_SR' + crYear;
         setResponse(Response1.data)
+            });
+
+        // document.title = 'Report_SR' + crYear;
+        // setSubmittedSRYear(crYear)
+        // setResponse(Response1.data)
     }
 
     const handleReset = () => {
@@ -193,12 +204,12 @@ const Utility = () => {
                 </form>
             </div>
             <div className="responseContainer">
-                {response.length>0 && <div className='DRBtnContainer'><button className='DRBtn' onClick={()=>handlePrint()}>Download Report</button></div>}
+                {response.length > 0 && <div className='DRBtnContainer'><button className='DRBtn' onClick={() => handlePrint()}>Download Report</button></div>}
                 <table className='responseTable' id='responseTable'>
                     <tbody>
-                    {response.map((item) => (
-                        <>
-                            
+                        {response.map((item) => (
+                            <>
+
                                 <tr>
                                     <th style={{ backgroundColor: `${item.hasChanges ? '#ffd8d8' : '#ddffd8'}`, }} colSpan={5}>
                                         <div className="headerContainer">
@@ -219,27 +230,27 @@ const Utility = () => {
                                         <th>suggestion</th>
                                     </tr>
                                 )}
-                            
-                            {item.hasChanges && (
-                             <>
-                                    {item.changes.map((change, fieldIndex) => (
-                                        <tr key={fieldIndex}>
-                                            <td>{change.field}</td>
-                                            <td>{change.current_value}</td>
-                                            <td>{change.requirementType}</td>
-                                            <td>{change.requirement}</td>
-                                            <td>{change.suggestion}</td>
-                                        </tr>
-                                    ))}
-                            </>
-                            )}
 
-                        </>))}
-                        </tbody>
+                                {item.hasChanges && (
+                                    <>
+                                        {item.changes.map((change, fieldIndex) => (
+                                            <tr key={fieldIndex}>
+                                                <td>{change.field}</td>
+                                                <td>{change.current_value}</td>
+                                                <td>{change.requirementType}</td>
+                                                <td>{change.requirement}</td>
+                                                <td>{change.suggestion}</td>
+                                            </tr>
+                                        ))}
+                                    </>
+                                )}
+
+                            </>))}
+                    </tbody>
                 </table>
 
             </div>
-            {showCompareScreen && <ValidateAMsg msgTyp={comparemsgType} CRYear={submittedSRYear} onClose={() => {setShowCompareScreen(false); document.title = 'Report_SR'+submittedSRYear;}} />}
+            {showCompareScreen && <ValidateAMsg msgTyp={comparemsgType} CRYear={submittedSRYear} onClose={() => { setShowCompareScreen(false); document.title = 'Report_SR' + submittedSRYear; }} />}
         </div>
     )
 }
