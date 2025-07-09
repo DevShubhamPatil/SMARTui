@@ -48,16 +48,16 @@ const ValidateAMsg = ({ msgTyp, CRYear, onClose }) => {
     } else {
       setErrorMsg('');
 //-------------------------------------------------------------------------------------
-const encodedMtMsg = encodeURIComponent(inputMessage);
-const URL = `http://localhost:8000/compare?mt_msg=${encodedMtMsg}`
-console.log(URL)
-fetch(URL)
-  .then(res => res.json())
-  .then(data => console.log(data))
-  .catch(e=>console.log(e));
+// const encodedMtMsg = encodeURIComponent(inputMessage);
+// const URL = `http://localhost:8000/compare?mt_msg=${encodedMtMsg}`
+// console.log(URL)
+// fetch(URL)
+//   .then(res => res.json())
+//   .then(data => console.log(data))
+//   .catch(e=>console.log(e));
 //-------------------------------------------------------------------------------------
 
-      // setResponseData(Response2.data.fields);
+      setResponseData(Response2.data.fields);
     }
   }
 

@@ -36,20 +36,20 @@ const Utility = () => {
             alert("Please select CR Year and at least one Msg Type");
             return;
         }
-        const URL = `http://localhost:8000/parse-rules-from-year?year=${crYear}&mt_list=${tags.join('&mt_list=')}`
-        console.log(URL)
-        setSubmittedSRYear(crYear)
-        fetch(URL)
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(e=>{console.log(e)
-        document.title = 'Report_SR' + crYear;
-        setResponse(Response1.data)
-            });
-
-        // document.title = 'Report_SR' + crYear;
+        // const URL = `http://localhost:8000/parse-rules-from-year?year=${crYear}&mt_list=${tags.join('&mt_list=')}`
+        // console.log(URL)
         // setSubmittedSRYear(crYear)
+        // fetch(URL)
+        //     .then(response => response.json())
+        //     .then(data => console.log(data))
+        //     .catch(e=>{console.log(e)
+        // document.title = 'Report_SR' + crYear;
         // setResponse(Response1.data)
+        //     });
+
+        document.title = 'Report_SR' + crYear;
+        setSubmittedSRYear(crYear)
+        setResponse(Response1.data)
     }
 
     const handleReset = () => {
